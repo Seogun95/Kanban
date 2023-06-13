@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { isDarkAtom } from 'atom';
+import { HiSun } from 'react-icons/hi';
+import { WiStars } from 'react-icons/wi';
 
 export function DarkModeToggle() {
   const [isDark, setIsDark] = useRecoilState(isDarkAtom);
@@ -22,8 +24,10 @@ export function DarkModeToggle() {
       />
 
       <Switch htmlFor="darkModeToggle">
-        <Button />
-        <Background />
+        <Button>{!isDark && <HiSun />}</Button>
+        <Background>
+          <StyledStar />
+        </Background>
       </Switch>
     </>
   );
@@ -34,10 +38,10 @@ const Switch = styled.label`
   position: fixed;
   z-index: 99999;
   margin: 0.8rem 0.5rem;
-  width: 90px;
-  height: 40px;
-  bottom: 0px;
-  right: 0px;
+  width: 5.625rem;
+  height: 2.5rem;
+  bottom: 0rem;
+  right: 0rem;
 `;
 
 const Input = styled.input`
@@ -45,23 +49,23 @@ const Input = styled.input`
 
   &:checked + ${Switch} {
     & > .switch__button {
-      left: calc(100% - 5px);
+      left: calc(100% - 0.3125rem);
       transform: translateX(-100%);
       transition: 0.3s ease-in-out all;
-      box-shadow: inset 3px 5px 3px #edf1f9;
+      box-shadow: inset 0.1875rem 0.3125rem 0.1875rem #edf1f9;
       background: #c3c9d2;
 
       &:before {
         content: '';
         display: block;
         position: absolute;
-        left: 15px;
-        top: 5px;
-        height: 9px;
-        width: 9px;
-        border-radius: 9px;
+        left: 0.9375rem;
+        top: 0.3125rem;
+        height: 0.5625rem;
+        width: 0.5625rem;
+        border-radius: 0.5625rem;
         background: #949ead;
-        box-shadow: inset 2px 1px 1px #848e9b;
+        box-shadow: inset 0.125rem 0.0625rem 0.0625rem #848e9b;
         opacity: 1;
       }
 
@@ -69,20 +73,22 @@ const Input = styled.input`
         content: '';
         display: block;
         position: absolute;
-        left: 4px;
-        top: 13px;
-        height: 12px;
-        width: 12px;
-        border-radius: 12px;
+        left: 0.25rem;
+        top: 0.8125rem;
+        height: 0.75rem;
+        width: 0.75rem;
+        border-radius: 0.75rem;
         background: #949ead;
-        box-shadow: inset 2px 2px 2px #848e9b;
+        box-shadow: inset 0.125rem 0.125rem 0.125rem #848e9b;
         opacity: 1;
       }
     }
 
     & > .switch__background {
       background-position: 20% 0%;
-
+      svg {
+        opacity: 1;
+      }
       &:before {
         opacity: 0.9;
       }
@@ -96,15 +102,18 @@ const Input = styled.input`
 `;
 
 const Button = styled.div.attrs({ className: 'switch__button' })`
-  top: 5px;
-  left: 5px;
-  width: 30px;
-  height: 30px;
-  border-radius: 30px;
+  ${({ theme }) => theme.FlexRow};
+  ${({ theme }) => theme.FlexCenter};
+  top: 0.3125rem;
+  left: 0.3125rem;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 1.875rem;
   background: #f1c530;
   position: absolute;
   transition: 0.3s ease-in-out all;
-  box-shadow: inset 3px 5px 3px #f8a100;
+  box-shadow: inset 0.1875rem 0.3125rem 0.1875rem #f8a100;
+  filter: ${({ theme }) => theme.shadow.drop};
   &:before {
     content: '';
     opacity: 0;
@@ -115,19 +124,25 @@ const Button = styled.div.attrs({ className: 'switch__button' })`
     opacity: 0;
     transition: 0.5s ease;
   }
+  svg {
+    color: white;
+    width: 100%;
+    height: 80%;
+  }
 `;
 
 const Background = styled.div.attrs({ className: 'switch__background' })`
+  position: relative;
   width: 100%;
   height: 100%;
   display: block;
   z-index: -1;
   background: grey;
-  border-radius: 40px;
+  border-radius: 2.5rem;
   position: relative;
   filter: ${({ theme }) => theme.shadow.drop};
-  box-shadow: inset -4px -4px 6px rgba(255, 255, 255, 0.3),
-    inset 4px 4px 6px rgba(70, 70, 70, 0.12);
+  box-shadow: inset -0.25rem -0.25rem 0.375rem rgba(255, 255, 255, 0.3),
+    inset 0.25rem 0.25rem 0.375rem rgba(70, 70, 70, 0.12);
   background: radial-gradient(
     circle at center right,
     #347ab2,
@@ -154,32 +169,32 @@ const Background = styled.div.attrs({ className: 'switch__background' })`
   transition: 0.3s ease-in-out background;
   overflow: hidden;
 
-  &:before {
-    content: '★';
-    display: block;
-    position: absolute;
-    left: 12px;
-    top: 8px;
-    font-size: 8px;
-    color: white;
-    opacity: 0;
-    transition: 0.3s ease-in-out all;
-    text-shadow: 10px 10px 0px rgba(255, 255, 255, 0.8),
-      20px 5px 0px rgba(255, 255, 255, 1);
-  }
-
   &:after {
     content: '';
     display: block;
     transition: 0.3s ease-in-out all;
     position: absolute;
-    width: 25px;
-    height: 25px;
-    left: 5px;
-    border-radius: 25px;
-    box-shadow: 30px 30px 0px rgba(255, 255, 255, 1),
-      50px 20px 0px rgba(255, 255, 255, 1), 65px 25px 0px rgba(255, 255, 255, 1),
-      29px 28px 0px rgba(215, 215, 215, 1), 49px 18px 0px rgba(215, 215, 215, 1),
-      65px 23px 0px rgba(215, 215, 215, 1);
+    width: 1.5625rem;
+    height: 1.5625rem;
+    left: 0.3125rem;
+    border-radius: 1.5625rem;
+    box-shadow: 1.875rem 1.875rem 0rem rgba(255, 255, 255, 1),
+      3.125rem 1.25rem 0rem rgba(255, 255, 255, 1),
+      4.0625rem 1.5625rem 0rem rgba(255, 255, 255, 1),
+      1.8125rem 1.75rem 0rem rgba(215, 215, 215, 1),
+      3.0625rem 1.125rem 0rem rgba(215, 215, 215, 1),
+      4.0625rem 1.4375rem 0rem rgba(215, 215, 215, 1);
   }
+`;
+
+const StyledStar = styled(WiStars)`
+  position: absolute;
+  left: 0.3125rem;
+  top: 0rem;
+  font-size: 1.875rem;
+  color: white;
+  opacity: 0;
+  transition: 0.3s ease-in-out all;
+  text-shadow: 0.625rem 0.625rem 0rem rgba(255, 255, 255, 0.8),
+    1.25rem 0.3125rem 0rem rgba(255, 255, 255, 1);
 `;
