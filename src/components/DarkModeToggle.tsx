@@ -7,6 +7,8 @@ export function DarkModeToggle() {
   const [isDark, setIsDark] = useRecoilState(isDarkAtom);
 
   const toggleDarkMode = useCallback(() => {
+    const audio = new Audio(`${process.env.PUBLIC_URL}/sound/click.mp3`);
+    audio.play();
     setIsDark(prev => !prev);
   }, [setIsDark]);
 
