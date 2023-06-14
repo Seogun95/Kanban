@@ -11,6 +11,7 @@ export default function Header() {
     isScrolled: false,
     isScrollTop: true,
   });
+  console.log('scroll --->', scroll);
 
   const [lastScrollTop, setLastScrollTop] = useState<number>(0);
   const location = useLocation();
@@ -50,7 +51,7 @@ export default function Header() {
   return (
     <HeaderStyles
       className={scroll.isScrolled ? 'isHidden' : ''}
-      scroll={`${scroll.isScrolled}`}
+      scrollTop={`${scroll.isScrollTop}`}
     >
       <HeaderContainer>
         <HeaderLogoContainer>
@@ -64,7 +65,7 @@ export default function Header() {
   );
 }
 
-const HeaderStyles = styled.header<{ scroll: string }>`
+const HeaderStyles = styled.header<{ scrollTop: string }>`
   width: 100%;
   height: 3.125rem;
   display: flex;
@@ -74,9 +75,8 @@ const HeaderStyles = styled.header<{ scroll: string }>`
   left: 0;
   transition: all 0.3s ease-in-out;
   z-index: 99999;
-
-  ${({ scroll }) =>
-    scroll === 'true'
+  ${({ scrollTop }) =>
+    scrollTop === 'true'
       ? css`
           background-color: transparent;
         `
