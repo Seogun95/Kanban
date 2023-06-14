@@ -11,7 +11,6 @@ export default function Header() {
     isScrolled: false,
     isScrollTop: true,
   });
-  console.log('scroll --->', scroll);
 
   const [lastScrollTop, setLastScrollTop] = useState<number>(0);
   const location = useLocation();
