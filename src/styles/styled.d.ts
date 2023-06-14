@@ -39,6 +39,13 @@ declare module 'styled-components' {
       drop: string;
       drop1: string;
     };
+    card: {
+      bgColor: string;
+      boardColor: string;
+      cardColor: string;
+      leave: string;
+      over: string;
+    };
     media: {
       mobile: (literals: TemplateStringsArray, ...args: any[]) => CSSProp;
       tablet: (literals: TemplateStringsArray, ...args: any[]) => CSSProp;
