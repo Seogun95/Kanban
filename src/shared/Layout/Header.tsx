@@ -1,49 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { logoActive, logoHover, logo } from 'assets/svg';
+import { isDarkAtom } from 'atom';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled, { css } from 'styled-components';
+import _ from 'lodash';
 
 interface IHeader {
   isScrolled: boolean;
   isScrollTop: boolean;
 }
 export default function Header() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isDark = useRecoilValue(isDarkAtom);
+
   const [scroll, setScroll] = useState<IHeader>({
     isScrolled: false,
     isScrollTop: true,
   });
-
   const [lastScrollTop, setLastScrollTop] = useState<number>(0);
-  const location = useLocation();
+  const [isHovered, setIsHovered] = useState(false);
+  const homeCheck = location.pathname === '/';
+  const scrollTop = window.pageYOffset;
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset;
       setScroll(prevState => {
-        if (scrollTop === 0) {
-          return { ...prevState, isScrollTop: true };
-        } else if (scrollTop > lastScrollTop && scrollTop > 0) {
+        if (scrollTop > lastScrollTop && scrollTop > 0) {
           return { ...prevState, isScrolled: true };
         } else {
           return { isScrollTop: false, isScrolled: false };
         }
       });
-
       setLastScrollTop(scrollTop);
     };
 
+    const handleResize = _.debounce(() => {
+      if (scrollTop === 0) {
+        setScroll({ isScrollTop: true, isScrolled: false });
+      }
+      setLastScrollTop(scrollTop);
+    }, 200);
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollTop]);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [lastScrollTop, scrollTop]);
 
   useEffect(() => {
-    const scrollTop = window.pageYOffset;
     if (scrollTop === 0) {
       setScroll({ isScrollTop: true, isScrolled: false });
     }
     setLastScrollTop(scrollTop);
-  }, [location]);
+  }, [location, scrollTop]);
 
   const scrollToTop = () => {
+    if (homeCheck && scrollTop === 0) return;
+    if (!homeCheck && scrollTop === 0) {
+      navigate('/');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -54,10 +75,14 @@ export default function Header() {
     >
       <HeaderContainer>
         <HeaderLogoContainer>
-          {/* <div onClick={scrollToTop}>홈으로</div> */}
-          <Link to="/" onClick={scrollToTop}>
-            제목
-          </Link>
+          <HeaderLink
+            onClick={scrollToTop}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={isHovered ? 'active' : ''}
+          >
+            <LogoImg src={logo} isDark={isDark} />
+          </HeaderLink>
         </HeaderLogoContainer>
       </HeaderContainer>
     </HeaderStyles>
@@ -95,16 +120,38 @@ const HeaderContainer = styled.div`
 `;
 const HeaderLogoContainer = styled.div`
   flex: 0 0 auto;
-
+  display: flex;
   div {
     ${props => props.theme.CursorActive};
   }
-  a {
-    font-weight: 900;
-    font-size: 1.2rem;
-    transition: 0.1s ease-in;
-    &:hover {
-      color: ${props => props.theme.accentColor};
+`;
+
+const LogoImg = styled.img<{ isDark: boolean }>`
+  content: url(${logo});
+  width: 2.5rem;
+  height: 100%;
+  padding: 0.2rem;
+  filter: ${({ isDark }) => isDark && 'invert(1)'};
+`;
+
+const HeaderLink = styled.a`
+  font-weight: 900;
+  font-size: 1.2rem;
+  transition: 0.1s ease-in;
+  &:hover {
+    color: ${props => props.theme.accentColor};
+  }
+  &:before {
+    content: '';
+    ${({ theme }) => theme.AbsoluteTL};
+    ${({ theme }) => theme.wh100};
+  }
+  &.active {
+    &:hover ${LogoImg} {
+      content: url(${logoHover});
+    }
+    &:active ${LogoImg} {
+      content: url(${logoActive});
     }
   }
 `;
