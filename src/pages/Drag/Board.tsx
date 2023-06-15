@@ -1,17 +1,21 @@
-import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { DraggableCard } from './DraggableCard';
 
+import { ITodoObject } from 'atom';
+import { TodoInputTemplate } from './TodoInputTemplate';
+
 interface IBoardProps {
-  todo: string[];
+  todo: ITodoObject[];
   boardId: string;
 }
+
 export const Board = ({ todo, boardId }: IBoardProps) => {
   return (
     <>
       <Wrapper>
         <h3>{boardId}</h3>
+        <TodoInputTemplate boardId={boardId} />
         <DroppableWrapper>
           <Droppable droppableId={boardId}>
             {(droppable, snapshot) => (
@@ -27,7 +31,12 @@ export const Board = ({ todo, boardId }: IBoardProps) => {
                     <EmptyCardTitle>비어있습니다</EmptyCardTitle>
                   ) : (
                     todo.map((card, index) => (
-                      <DraggableCard key={card} card={card} index={index} />
+                      <DraggableCard
+                        key={card.id}
+                        todoText={card.todoText}
+                        todoId={card.id}
+                        index={index}
+                      />
                     ))
                   )}
                   {/* Draggable 엘리먼트를 드래그하는 동안 position: fixed(영역을 고정시킴)하는 옵션 */}
@@ -45,14 +54,12 @@ export const Board = ({ todo, boardId }: IBoardProps) => {
 const Wrapper = styled.div`
   ${({ theme }) => theme.FlexCol};
   width: 300px;
-
   h3 {
     margin-bottom: 1rem;
     text-align: center;
   }
-
   ${({ theme }) => theme.media.tablet`
-    min-height: 300px;
+    padding-bottom: 2rem
   `}
 `;
 
@@ -61,7 +68,7 @@ const DroppableWrapper = styled.div`
   background-color: ${({ theme }) => theme.card.boardColor};
   box-shadow: ${({ theme }) => theme.shadow.box};
   border-radius: 5px;
-  min-height: 50px;
+  min-height: 120px;
 `;
 
 interface IDroppableProps {
