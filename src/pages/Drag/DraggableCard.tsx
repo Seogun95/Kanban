@@ -1,30 +1,33 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 
 interface DraggableProps {
-  card: string;
+  todoText: string;
+  todoId: string;
   index: number;
 }
 
-export const DraggableCard = React.memo(({ card, index }: DraggableProps) => {
-  return (
-    <>
-      <Draggable draggableId={card} index={index}>
-        {(draggable, snapshot) => (
-          <CardContainer
-            ref={draggable.innerRef}
-            isDragging={snapshot.isDragging}
-            {...draggable.draggableProps}
-            {...draggable.dragHandleProps}
-          >
-            <Card>{card}</Card>
-          </CardContainer>
-        )}
-      </Draggable>
-    </>
-  );
-});
+export const DraggableCard = React.memo(
+  ({ todoText, todoId, index }: DraggableProps) => {
+    return (
+      <>
+        <Draggable draggableId={String(todoId)} index={index}>
+          {(draggable, snapshot) => (
+            <CardContainer
+              ref={draggable.innerRef}
+              isDragging={snapshot.isDragging}
+              {...draggable.draggableProps}
+              {...draggable.dragHandleProps}
+            >
+              <Card>{todoText}</Card>
+            </CardContainer>
+          )}
+        </Draggable>
+      </>
+    );
+  },
+);
 
 const CardContainer = styled.div<{ isDragging: boolean }>`
   background-color: ${({ theme, isDragging }) =>
@@ -38,4 +41,6 @@ const CardContainer = styled.div<{ isDragging: boolean }>`
   margin-bottom: 1rem;
 `;
 
-const Card = styled.span``;
+const Card = styled.span`
+  ${({ theme }) => theme.TextEllipsis}
+`;
