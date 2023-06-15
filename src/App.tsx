@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from 'atom';
+import { PreloadImages } from 'assets';
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={true} />
         <ThemeProvider theme={theme}>
+          <PreloadImages />
           <GlobalStyle />
           <Outlet />
         </ThemeProvider>
