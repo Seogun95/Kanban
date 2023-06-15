@@ -34,8 +34,12 @@ export const hoursSelector = selector<number>({
 });
 /* ======= END ======= */
 
+export interface ITodoObject {
+  id: string;
+  todoText: string;
+}
 export interface IToDoState {
-  [key: string]: string[];
+  [key: string]: ITodoObject[];
 }
 
 const { persistAtom: todoPersist } = recoilPersist({
@@ -46,9 +50,9 @@ const { persistAtom: todoPersist } = recoilPersist({
 export const todoDragState = atom<IToDoState>({
   key: 'dropTodo',
   default: {
-    '해야할 일': ['하나', '다섯'],
-    '하는 중': ['둘'],
-    '완 료': ['셋', '넷'],
+    '해야할 일': [],
+    '하는 중': [],
+    '완 료': [],
   },
   effects_UNSTABLE: [todoPersist],
 });

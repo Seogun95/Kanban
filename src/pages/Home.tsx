@@ -1,12 +1,12 @@
-import React from 'react';
 import styled from 'styled-components';
 
 //npm i react-beautiful-dnd
 //npm i --save-dev @types/react-beautiful-dnd
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useRecoilState } from 'recoil';
-import { IToDoState, todoDragState } from 'atom';
+import { todoDragState } from 'atom';
 import { Board } from './Drag/Board';
+import { TodoCategoryTemplate } from './Drag/TodoCategoryTemplate';
 
 export function Home() {
   const [toDo, setTodo] = useRecoilState(todoDragState);
@@ -21,37 +21,50 @@ export function Home() {
     splice는 배열 자체를 수정하기 때문에 새로운 배열로 복사
   */
 
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  const onDragEnd = (info: DropResult) => {
+    const { destination, source } = info;
     if (!destination) return;
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
+
+    if (destination.droppableId === source.droppableId) {
+      setTodo(prev => {
+        const todoCopy = [...prev[source.droppableId]];
+        const selectedObject = todoCopy[source.index];
+        todoCopy.splice(source.index, 1);
+        todoCopy.splice(destination.index, 0, selectedObject);
+        return {
+          ...prev,
+          [source.droppableId]: todoCopy,
+        };
+      });
     }
 
-    setTodo(allBoards => {
-      const copyToDos: IToDoState = {};
-      Object.keys(allBoards).forEach(toDosKey => {
-        copyToDos[toDosKey] = [...allBoards[toDosKey]];
+    if (destination.droppableId !== source.droppableId) {
+      setTodo(prev => {
+        const sourBoard = [...prev[source.droppableId]];
+        const selectedObject = sourBoard[source.index];
+        const destinationBoard = [...prev[destination.droppableId]];
+        sourBoard.splice(source.index, 1);
+        destinationBoard.splice(destination.index, 0, selectedObject);
+        return {
+          ...prev,
+          [source.droppableId]: sourBoard,
+          [destination.droppableId]: destinationBoard,
+        };
       });
-      copyToDos[source.droppableId].splice(source.index, 1);
-      copyToDos[destination.droppableId].splice(
-        destination.index,
-        0,
-        draggableId,
-      );
-      return copyToDos;
-    });
+    }
   };
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
+          <TodoCategoryTemplate />
           <BoardContainer>
-            {Object.keys(toDo).map(boardId => (
-              <Board todo={toDo[boardId]} boardId={boardId} />
-            ))}
+            {Object.keys(toDo).map(boardId => {
+              return (
+                <Board key={boardId} todo={toDo[boardId]} boardId={boardId} />
+              );
+            })}
           </BoardContainer>
         </Wrapper>
       </DragDropContext>
@@ -61,9 +74,7 @@ export function Home() {
 
 const Wrapper = styled.section`
   max-width: 50rem;
-  height: calc(100vh - 164px);
   margin: 0 auto;
-  overflow-y: auto;
 `;
 
 const BoardContainer = styled.article`
@@ -73,4 +84,9 @@ const BoardContainer = styled.article`
   width: 100%;
   gap: 10px;
   padding: 1rem;
+
+  ${({ theme }) => theme.media.tablet`
+      ${theme.FlexCol};
+      ${theme.FlexCenter};
+  `}
 `;
