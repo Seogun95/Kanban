@@ -5,6 +5,7 @@ import App from 'App';
 
 import { Home } from 'pages';
 import { Layout, NotFound } from 'shared';
+import { AtomSelector } from 'pages/AtomSelector';
 
 const router = createBrowserRouter(
   [
@@ -24,12 +25,16 @@ const router = createBrowserRouter(
               index: true,
               element: <Home />,
             },
+            {
+              path: ':home',
+              element: <AtomSelector />,
+            },
           ],
         },
       ],
     },
   ],
-  { basename: process.env.PUBLIC_URL }
+  { basename: process.env.PUBLIC_URL },
 );
 
 export default router;
