@@ -27,14 +27,14 @@ const moon = keyframes`
   }
   90% {
     background-color: transparent;
-    box-shadow: .3125rem -0.0625rem 0 white;
-    filter: blur(0);
+    box-shadow: 0.3125rem -0.0625rem 0 white, 0.3125rem -0.0625rem 1px white, 0.3125rem -0.0625rem 0 white, 0.3125rem -0.0625rem 3px white;
+    filter: blur(.2px);
   }
   100% {
     transform: rotate(170deg);
     background-color: transparent;
-    box-shadow: .3125rem -0.0625rem 0 white;
-    filter: blur(0);
+    box-shadow: 0.3125rem -0.0625rem 0 white, 0.3125rem -0.0625rem 1px white, 0.3125rem -0.0625rem 0 white, 0.3125rem -0.0625rem 3px white;
+    filter: blur(.2px);
   }
 `;
 
@@ -71,8 +71,43 @@ const shooting = keyframes`
     opacity: 1;
   }
   100% {
-    transform: rotate(321deg) translateX(0);
+    transform: rotate(328deg) translateX(0);
       opacity: 1;
+  }
+`;
+const darkHover = keyframes`
+  0% {
+    transform: translateX(160%);
+  }
+  25% {
+    transform: translateX(140%) ;
+  }
+  50% {
+    transform: translateX(160%) ;
+  }
+  75% {
+    transform: translateX(150%) ;
+  }
+  90% {
+    transform: translateX(155%) ;
+  }
+`;
+
+const lightHover = keyframes`
+  0% {
+    transform: translateX(0%) ;
+  }
+  25% {
+    transform: translateX(20%) ;
+  }
+  50% {
+    transform: translateX(0%) ;
+  }
+  75% {
+    transform: translateX(10%) ;
+  }
+  90% {
+    transform: translateX(5%) ;
   }
 `;
 
@@ -82,4 +117,6 @@ export const Keyframes = {
   moon,
   shooting,
   sun,
+  darkHover,
+  lightHover,
 };
