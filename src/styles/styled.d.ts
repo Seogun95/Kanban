@@ -9,8 +9,12 @@ declare module 'styled-components' {
     FlexRow;
     FlexCenter;
     AbsoluteTL;
+    AbsoluteCenter;
     CursorActive;
     DarkBlur;
+    NoPaddingMargin;
+    TextEllipsis;
+    TextEllipsisMultiline;
     blue: {
       brandColor1: string;
       brandColor2: string;
@@ -35,9 +39,15 @@ declare module 'styled-components' {
     pointColorLight: string;
     shadow: {
       box: string;
+      box_Hover: string;
       box1: string;
       drop: string;
+      drop_Hover: string;
       drop1: string;
+    };
+    scrollbar: {
+      bg: string;
+      hover: string;
     };
     card: {
       bgColor: string;

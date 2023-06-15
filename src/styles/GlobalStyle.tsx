@@ -31,16 +31,54 @@ code {
 a {
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
 }
 
 button {
-  text-align: center;
   display: inline-block;
+  text-align: center;
+  transition: .2s ease;
+  background-color: ${({ theme }) => theme.bgColorDeep};
+  color: ${({ theme }) => theme.color};
+  border: none;
+  padding: .5rem;
+  border-radius: .625rem;
+  white-space: pre;
   cursor: pointer;
-  transition: .1s ease;
-  &:active {
+
+  &:disabled {
+    cursor: not-allowed;
     opacity: .7;
   }
+
+}
+
+input {
+  background-color: ${({ theme }) => theme.bgColorDeep};
+  border: none;
+  border-radius: .625rem;
+  padding: .5rem 1rem;
+  color: ${({ theme }) => theme.color};
+  overflow: hidden;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active  {
+	-webkit-text-fill-color: ${({ theme }) => theme.color};
+  -webkit-box-shadow: 0 0 0px 1000px ${({ theme }) => theme.bgColorDeep} inset;
+  box-shadow: 0 0 0px 1000px ${({ theme }) => theme.bgColorDeep} inset;
+  caret-color: ${({ theme }) => theme.color} !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+button, a, span, p {
+  line-height: 1.13;
 }
 
 h1 { font-size: 2.5rem }
@@ -104,22 +142,39 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+    height: 1rem;
+    width: .5rem;
+    background: transparent;
 }
+
+::-webkit-scrollbar:horizontal {
+    height: .5rem;
+    width: 1rem
+}
+
+::-webkit-scrollbar-corner, ::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 ::-webkit-scrollbar-thumb {
+  background-color: ${({ theme }) => theme.scrollbar.bg};
   background-clip: padding-box;
   border: 0 solid transparent;
   border-radius: 10px;
+  &:hover {
+    background-color: ${({ theme }) => theme.scrollbar.hover};
+  }
+}
 
-}
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
+${({ theme }) => theme.media.tablet`
+    .scrollbar-trigger ::-webkit-scrollbar-thumb {
+        visibility:hidden;
+      &:hover {
+        visibility: visible;
+      }
+    }
+`}
 
-::-webkit-scrollbar-corner {
-  background-color: transparent;
-}
 
 /* Reset */
 html, body, div, span, applet, object, iframe,
